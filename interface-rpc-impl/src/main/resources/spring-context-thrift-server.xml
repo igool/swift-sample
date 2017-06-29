@@ -24,10 +24,17 @@
 		<property name="zkClient" ref="thriftZookeeper" />
 	</bean>
 	<bean id="helloSerivceImpl" class="com.igool.ping.service.thrift.HelloServiceImpl" />
+	<bean id="fileSerivceImpl" class="com.igool.file.service.thrift.FileServiceImpl" />
 
 	<bean id="helloService" class="com.igool.thrift.rpc.ThriftServiceServerFactory"
 		destroy-method="close">
-		<property name="service" ref="helloSerivceImpl" />
+		<!--<property name="service" ref="helloSerivceImpl" />-->
+		<property name="objectList">
+			<list>
+				<ref bean="helloSerivceImpl"></ref>
+				<ref bean="fileSerivceImpl"></ref>
+			</list>
+		</property>
 		<property name="port" value="9000" />
 		<property name="version" value="1.0.0" />
 		<property name="weight" value="1" />
