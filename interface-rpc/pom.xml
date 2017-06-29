@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.igool</groupId>
+        <artifactId>swift-test</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <groupId>com.igool</groupId>
+    <artifactId>swift-rpc</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-codec -->
+        <dependency>
+            <groupId>com.facebook.swift</groupId>
+            <artifactId>swift-codec</artifactId>
+            <version>${swift-version}</version>
+            <!--<scope>provided</scope>-->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
+        <dependency>
+            <groupId>com.facebook.swift</groupId>
+            <artifactId>swift-service</artifactId>
+            <version>${swift-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sohu.thrift</groupId>
+            <artifactId>thrift-generator</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>cxy</id>
+            <url>http://nexus.oa.yitopapp.com/content/repositories/cxy</url>
+        </repository>
+    </repositories>
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>com.facebook.mojo</groupId>
+                <artifactId>swift-maven-plugin</artifactId>
+                <version>${swift-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>false</skip>
+                    <idlFiles>
+                        <directory>${project.basedir}/src/main/thrift/</directory>
+                        <includes>
+                            <include>**/*.thrift</include>
+                        </includes>
+                        <!--<excludes>-->
+                        <!--<exclude>**/other.thrift</exclude>-->
+                        <!--</excludes>-->
+                    </idlFiles>
+                   <!-- <defaultPackage>${project.groupId}.thrift.swift</defaultPackage>-->
+                    <outputFolder>${project.basedir}/src/main/java/</outputFolder>
+                    <!--使用idl的包名定义-->
+                    <usePlainJavaNamespace>true</usePlainJavaNamespace>
+                    <!--<fallbackToPlainJavaNamespace>true</fallbackToPlainJavaNamespace>-->
+                    <!--自动关闭流-->
+                    <addCloseableInterface>true</addCloseableInterface>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.thoughtworks.paranamer</groupId>
+                <artifactId>paranamer-maven-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <id>run</id>  <!-- id is optional -->
+                        <configuration>
+                            <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                        </configuration>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

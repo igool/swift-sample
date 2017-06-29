@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.igool</groupId>
+    <artifactId>swift-test</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <properties>
+        <swift-version>0.23.1</swift-version>
+        <libthrift.version>0.9.3</libthrift.version>
+        <spring.version>4.0.9.RELEASE</spring.version>
+        <zkserver.version>3.4.6</zkserver.version>
+        <curator-recipes.version>2.7.1</curator-recipes.version>
+        <slf4j.version>1.7.7</slf4j.version>
+        <logback.version>1.1.2</logback.version>
+    </properties>
+    <dependencies>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-codec -->
+            <dependency>
+                <groupId>com.facebook.swift</groupId>
+                <artifactId>swift-codec</artifactId>
+                <version>${swift-version}</version>
+                <!--<scope>provided</scope>-->
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
+            <dependency>
+                <groupId>com.facebook.swift</groupId>
+                <artifactId>swift-service</artifactId>
+                <version>${swift-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.thrift</groupId>
+                <artifactId>libthrift</artifactId>
+                <version>${libthrift.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zkserver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${curator-recipes.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+<modules>
+	<module>interface-rpc</module>
+	<module>interface-rpc-support</module>
+	<module>interface-rpc-impl</module>
+	<module>interface-rpc-impl-test</module>
+</modules>
+</project>
