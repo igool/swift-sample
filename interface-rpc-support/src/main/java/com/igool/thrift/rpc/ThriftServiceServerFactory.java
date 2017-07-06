@@ -26,7 +26,9 @@ public class ThriftServiceServerFactory implements InitializingBean ,Closeable{
 	// 优先级
 	private Integer weight = 1;// default
 	// 服务实现类
-	private Object service;// serice实现类
+	//private Object service;// serice实现类
+	//多服务类支持
+	private List<Object> objectList;
 	//服务版本号
 	private String version;
 	// 解析本机IP
@@ -35,7 +37,7 @@ public class ThriftServiceServerFactory implements InitializingBean ,Closeable{
 	private ThriftServerAddressRegister thriftServerAddressRegister;
 	//服务
 	ThriftServer server;
-	
+
 	public void setPort(Integer port) {
 		this.port = port;
 	}
@@ -44,9 +46,9 @@ public class ThriftServiceServerFactory implements InitializingBean ,Closeable{
 		this.weight = weight;
 	}
 
-	public void setService(Object service) {
+	/*public void setService(Object service) {
 		this.service = service;
-	}
+	}*/
 
 	public void setVersion(String version) {
 		this.version = version;
@@ -54,6 +56,10 @@ public class ThriftServiceServerFactory implements InitializingBean ,Closeable{
 
 	public void setThriftServerIpResolve(ThriftServerIpResolve thriftServerIpResolve) {
 		this.thriftServerIpResolve = thriftServerIpResolve;
+	}
+
+	public void setObjectList(List<Object> objectList) {
+		this.objectList = objectList;
 	}
 
 	public void setThriftServerAddressRegister(ThriftServerAddressRegister thriftServerAddressRegister) {
@@ -69,31 +75,35 @@ public class ThriftServiceServerFactory implements InitializingBean ,Closeable{
 		if (StringUtils.isEmpty(serverIP)) {
 			throw new ThriftException("cant find server ip...");
 		}
-
 		String hostname = serverIP + ":" + port + ":" + weight;
-		Class<?> serviceClass = service.getClass();
 		List serviceList = new ArrayList();
-		serviceList.add(serviceClass.newInstance());
 
-		Class<?>[] interfaces = serviceClass.getInterfaces();
-		if (interfaces.length == 0) {
-			throw new IllegalClassFormatException("service-class should implements interface");
+		if ( objectList == null ) {
+			throw new IllegalClassFormatException("service-class should have ");
 		}
-		// reflect,load "Processor";
-		String serviceName = null;
-		for (Class<?> clazz : interfaces) {
-			serviceName = clazz.getName();
+		for ( Object object :objectList){
+			Class<?> serviceClass = object.getClass();
+			Class<?>[] interfaces = serviceClass.getInterfaces();
+			serviceList.add(serviceClass.newInstance());
+			if (interfaces.length == 0) {
+				throw new IllegalClassFormatException("service-class should implements interface");
+			}
+			// reflect,load "Processor";
+			String serviceName = null;
+			for (Class<?> clazz : interfaces) {
+				serviceName = clazz.getName();
+				log.info("{} 服务已启动!",serviceClass);
+				// 注册服务
+				if (thriftServerAddressRegister != null) {
+					thriftServerAddressRegister.register(serviceName, version, hostname);
+				}
+				log.info("{} 服务已注册到{}!",serviceClass,hostname);
+			}
 		}
+
 		ServerCreator serverCreator = new ServerCreator().invoke(serviceList, port);
 		server = serverCreator.getServer();
-
 		server.start();
-		log.info("{} 服务已启动!",serviceClass);
-		// 注册服务
-		if (thriftServerAddressRegister != null) {
-			thriftServerAddressRegister.register(serviceName, version, hostname);
-		}
-		log.info("{} 服务已注册到{}!",serviceClass,hostname);
 
 	}
 
