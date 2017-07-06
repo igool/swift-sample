@@ -7,6 +7,7 @@ import com.facebook.swift.service.ThriftEventHandler;
 import com.facebook.swift.service.ThriftServer;
 import com.facebook.swift.service.ThriftServiceProcessor;
 import com.google.common.collect.ImmutableList;
+import com.igool.file.service.thrift.FileServiceImpl;
 import com.igool.ping.service.thrift.HelloServiceImpl;
 //import org.junit.Assert;
 
