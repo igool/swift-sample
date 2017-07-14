@@ -35,6 +35,13 @@
             <groupId>com.sohu.thrift</groupId>
             <artifactId>thrift-generator</artifactId>
             <version>0.0.1</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
