@@ -1,6 +1,7 @@
 package com.rpc;
 
 import com.facebook.swift.service.ThriftClientManager;
+import com.igool.file.service.thrift.FileService;
 import com.igool.ping.service.thrift.HelloService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ public class Client {
 		try {
 			final ApplicationContext context = new ClassPathXmlApplicationContext("spring-context-thrift-client.xml");
 			HelloService helloService = (HelloService) context.getBean("helloService");
+            FileService fileService = (FileService) context.getBean("fileService");
 			/*while (true) {
 				log.info(helloService.ping());
 			//}
@@ -44,6 +46,7 @@ public class Client {
 			int perform = Double.valueOf(max / (elapse / 1000d)).intValue();
 
 			log.info("thrift " + max + " 次RPC调用，耗时：" + elapse + "毫秒，平均" + perform + "次/秒");
+            log.info("file servie {}",fileService.deleteFile("test", true));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

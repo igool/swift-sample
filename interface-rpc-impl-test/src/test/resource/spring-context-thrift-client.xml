@@ -41,5 +41,16 @@
 		<property name="clientManager" ref="thriftClientMan"/>
     </bean>
 
+	<bean id="fileService" class="com.igool.thrift.rpc.ThriftServiceClientProxyFactory" destroy-method="close">
+		<property name="serverAddressProvider">
+			<bean class="com.igool.thrift.rpc.zookeeper.ThriftServerAddressProviderZookeeper">
+				<property name="service" value="com.igool.file.service.thrift.FileService" />
+				<property name="version" value="1.0.0" />
+				<property name="zkClient" ref="thriftZookeeper" />
+			</bean>
+		</property>
+		<property name="clientManager" ref="thriftClientMan"/>
+	</bean>
+
 	<bean id="thriftClientMan" class="com.facebook.swift.service.ThriftClientManager"/>
 </beans>
