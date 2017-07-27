@@ -84,7 +84,7 @@ public class ThriftServiceServerFactory implements InitializingBean ,Closeable{
 		for ( Object object :objectList){
 			Class<?> serviceClass = object.getClass();
 			Class<?>[] interfaces = serviceClass.getInterfaces();
-			serviceList.add(serviceClass.newInstance());
+			serviceList.add(object);
 			if (interfaces.length == 0) {
 				throw new IllegalClassFormatException("service-class should implements interface");
 			}
